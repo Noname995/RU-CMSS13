@@ -1,7 +1,7 @@
 //Defines what to times the OB and transport shuttle timers by based on the altitude
 #define SHIP_ALT_LOW 0.5
 #define SHIP_ALT_MED 1
-#define SHIP_ALT_HIGH 1.5
+#define SHIP_ALT_HIGH 2
 
 //List of available heights
 GLOBAL_VAR_INIT(ship_alt_list, list("Low Altitude" = SHIP_ALT_LOW, "Optimal Altitude" = SHIP_ALT_MED, "High Altitude" = SHIP_ALT_HIGH))
@@ -123,12 +123,13 @@ GLOBAL_VAR_INIT(ship_alt, SHIP_ALT_MED)
 		return
 	GLOB.ship_alt = new_altitude
 	TIMER_COOLDOWN_START(src, COOLDOWN_ALTITUDE_CHANGE, 90 SECONDS)
+	ai_silent_announcement("Attention: Performing high-G manoeuvre, ETA: 10 seconds", ";", TRUE)
+	sleep(10 SECONDS)
 	for(var/mob/living/carbon/current_mob in GLOB.living_mob_list)
 		if(!is_mainship_level(current_mob.z))
 			continue
 		current_mob.apply_effect(3, WEAKEN)
 		shake_camera(current_mob, 10, 2)
-	ai_silent_announcement("Attention: Performing high-G manoeuvre", ";", TRUE)
 
 #undef COOLING
 #undef OVERHEAT_COOLING
